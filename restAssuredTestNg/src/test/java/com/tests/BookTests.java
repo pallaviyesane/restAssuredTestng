@@ -14,10 +14,9 @@ public class BookTests extends BaseClass {
 	@Test(groups = "auth")
 	public void addBookToUser() {
 
-		Response res = httpRequest.when().body(addBook()).post(baseURI + "BookStore/v1/Books").thenReturn();
+		Response res = httpRequest.body(addBook()).when().post(baseURI + "BookStore/v1/Books").then().log().ifError().statusCode(HttpStatus.SC_CREATED).extract().response();
 
 		isbn = JsonPath.from(res.asString()).get("books[0].isbn");
-		Assert.assertEquals(res.getStatusCode(), HttpStatus.SC_CREATED);
 
 		System.out.println("isbn" + isbn);
 	}
@@ -25,8 +24,9 @@ public class BookTests extends BaseClass {
 	@Test(groups = "auth")
 	public void getBook() {
 
-		Response res = httpRequest.when().queryParam("ISBN", isbn).get(baseURI + "BookStore/v1/Book");
-		Assert.assertEquals(res.getStatusCode(), HttpStatus.SC_OK);
+		Response res = httpRequest.when().queryParam("ISBN", isbn).get(baseURI + "BookStore/v1/Book").then().statusCode( HttpStatus.SC_OK).extract().response();
+		String Actualisbn = JsonPath.from(res.asString()).get("isbn");
+		Assert.assertEquals(Actualisbn, isbn);
 	}
 
 }

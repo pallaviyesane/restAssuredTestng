@@ -56,6 +56,12 @@ public class BaseClass {
 		System.out.println("AfterGroup");
 	}
 
+	@AfterSuite
+	public void teardown() {
+		ExtendReport.endReport();
+
+	}
+
 	public User createUser() {
 		User user = new User();
 		user.setUserName("Rashmi11");
@@ -75,11 +81,5 @@ public class BaseClass {
 		book.put("collectionOfIsbns", collectionOfIsbns);
 
 		return book;
-	}
-
-	@AfterSuite
-	public void teardown() {
-		ExtendReport.endReport();
-
 	}
 }
